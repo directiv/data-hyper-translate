@@ -133,7 +133,7 @@ function parse(str) {
       acc[conf[0].trim()] = conf[1].trim().split('.');
     } else {
       conf = arg.split('.');
-      acc[conf.length - 1] = conf;
+      acc[conf[conf.length - 1]] = conf;
     };
 
     return acc;

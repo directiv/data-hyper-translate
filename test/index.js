@@ -5,25 +5,31 @@ describe('hyper-translate', function() {
   describe('parse', function() {
     [
       ['home.welcome-home',
-         'home.welcome-home', null, null],
+         ['home', 'welcome-home']],
       ['home.hello-user <- user.given-name',
-         'home.hello-user', [{target: 'given-name', path: ['user', 'given-name']}], null],
+         ['home', 'hello-user'], {'given-name': ['user', 'given-name']}],
       ['home.hello-user <- name:user.given-name',
-         'home.hello-user', [{target: 'name', path: ['user', 'given-name']}], null],
+         ['home', 'hello-user'], {'name': ['user', 'given-name']}],
       ['home.full-name <- user.given-name user.family-name',
-         'home.full-name', [{target: 'given-name', path: ['user', 'given-name']}, {target: 'family-name', path: ['user', 'family-name']}], null],
+         ['home', 'full-name'], {'given-name': ['user', 'given-name'], 'family-name': ['user', 'family-name']}],
       ['email.placeholder -> placeholder',
-         'email.placeholder', null, 'placeholder'],
+         ['email', 'placeholder'], null, 'placeholder'],
       ['post.title <- path.to.my.posts -> title',
-         'post.title', [{target: 'posts', path: ['path', 'to', 'my', 'posts']}], 'title']
+         ['post', 'title'], {'posts': ['path', 'to', 'my', 'posts']}, 'title']
     ].forEach(function(test) {
       var str = test[0];
       it(test[0], function() {
         var out = t.parse(str);
-        should.exist(out);
-        out.should.eql(test.slice(1));
+        assert('path', out, test[1]);
+        assert('params', out, test[2] || {});
+        if (test[3]) assert('target', out, test[3]);
       });
     });
 
   });
 });
+
+function assert(prop, out, expected) {
+  should.exist(out[prop]);
+  out[prop].should.eql(expected);
+}
