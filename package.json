@@ -14,5 +14,8 @@
   "devDependencies": {
     "mocha": "^1.21.4",
     "should": "^4.0.4"
+  },
+  "dependencies": {
+    "directiv-core-reduce": "^1.0.0"
   }
 }
